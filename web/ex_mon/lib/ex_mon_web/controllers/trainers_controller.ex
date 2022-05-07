@@ -21,6 +21,8 @@ defmodule ExMonWeb.TrainersController do
     |> text("")
   end
 
+  defp handle_delete({:error, _reason} = error, _conn), do: error
+
   defp handle_response({:ok, trainer}, conn) do
     conn
     |> put_status(:created)
