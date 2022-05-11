@@ -21,6 +21,12 @@ defmodule ExMonWeb.TrainerPokemonsController do
     |> handle_response(conn, "show.json", :ok)
   end
 
+  def update(conn, params) do
+    params
+    |> ExMon.update_trainer_pokemons()
+    |> handle_response(conn, "update.json", :ok)
+  end
+
   defp handle_delete({:ok, _pokemon}, conn) do
     conn
     |> put_status(:no_content)
