@@ -2,7 +2,7 @@ defmodule ExMon.Trainer.GetTest do
   use ExMon.DataCase
 
   alias ExMon.Trainer
-  alias Trainer.Delete
+  alias Trainer.Get
 
   describe "call/1" do
     test "When the ID is valid, return a trainer" do
@@ -11,7 +11,7 @@ defmodule ExMon.Trainer.GetTest do
 
       {:ok, %Trainer{id: id}} = ExMon.create_trainer(params)
 
-      assert {:ok, %Trainer{id: ^id}} = ExMon.Trainer.Get.call(id)
+      assert {:ok, %Trainer{id: ^id}} = Get.call(id)
     end
 
     test "When the ID is not valid, delete a trainer" do
