@@ -14,6 +14,7 @@ defmodule ExMon.Trainer.DeleteTest do
       assert {:ok, _trainer} = Delete.call(id)
     end
   end
+
   test "When the ID is not valid, delete a trainer" do
     id = "invalid_ID"
 
