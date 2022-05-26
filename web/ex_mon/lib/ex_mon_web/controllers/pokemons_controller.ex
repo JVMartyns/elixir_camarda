@@ -9,11 +9,14 @@ defmodule ExMonWeb.PokemonsController do
     |> handle_response(conn)
   end
 
-  def handle_response({:ok, pokemon}, conn) do
+  defp handle_response({:ok, pokemon}, conn) do
     conn
     |> put_status(:ok)
     |> json(pokemon)
   end
 
-  def handle_response({:error, _reason} = error, _conn), do: error
+  defp handle_response({:error, "Pokemon not found!" = message}, _conn),
+    do: {:error, message, :not_found}
+
+  defp handle_response({:error, _reason} = error, _conn), do: error
 end

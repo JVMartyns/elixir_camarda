@@ -14,11 +14,17 @@ defmodule ExMonWeb.TrainersController do
     end
   end
 
-  def sign_in(conn, params) do
-    with {:ok, token} <- Guardian.authenticate(params) do
-      conn
-      |> put_status(:ok)
-      |> render("sign_in.json", token: token)
+  def sign_in(conn, %{"id" => id} = params) do
+    case Ecto.UUID.cast(id) do
+      {:ok, _id} ->
+        with {:ok, token} <- Guardian.authenticate(params) do
+          conn
+          |> put_status(:ok)
+          |> render("sign_in.json", token: token)
+        end
+
+      :error ->
+        {:error, "Invalid ID"}
     end
   end
 
@@ -53,6 +59,9 @@ defmodule ExMonWeb.TrainersController do
     |> put_status(status)
     |> render(view, trainer: trainer)
   end
+
+  defp handle_response({:error, "Trainer not found" = message}, _conn, _view, _status),
+    do: {:error, message, :not_found}
 
   defp handle_response({:error, _changeset} = error, _conn, _view, _status), do: error
 end

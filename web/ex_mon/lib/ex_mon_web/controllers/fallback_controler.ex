@@ -1,6 +1,20 @@
 defmodule ExMonWeb.FallbackController do
   use ExMonWeb, :controller
 
+  def call(conn, {:error, message, :not_found}) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(ExMonWeb.ErrorView)
+    |> render("404.json", message: message)
+  end
+
+  def call(conn, {:error, "Trainer not found" = message}) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(ExMonWeb.ErrorView)
+    |> render("404.json", message: message)
+  end
+
   def call(conn, {:error, :unauthorized}) do
     conn
     |> put_status(:unauthorized)
