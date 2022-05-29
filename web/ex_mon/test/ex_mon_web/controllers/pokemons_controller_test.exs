@@ -6,7 +6,8 @@ defmodule ExMonWeb.PokemonsControllerTest do
   @base_url "https://pokeapi.co/api/v2/pokemon/"
 
   describe "show/2" do
-    setup do
+    test "search and show pokemon", %{conn: conn} do
+      # ---------------------------Mock---------------------------------
       body = %{
         "id" => 25,
         "name" => "pikachu",
@@ -22,10 +23,7 @@ defmodule ExMonWeb.PokemonsControllerTest do
         %Tesla.Env{status: 200, body: body}
       end)
 
-      :ok
-    end
-
-    test "search and show pokemon", %{conn: conn} do
+      # ----------------------------------------------------------------
       response =
         conn
         |> get(Routes.pokemons_path(conn, :show, "pikachu"))
@@ -37,6 +35,24 @@ defmodule ExMonWeb.PokemonsControllerTest do
                "types" => ["eletric"],
                "weight" => 60
              }
+    end
+
+    test "When pokemon does not exist, return an error", %{conn: conn} do
+      # ---------------------------Mock---------------------------------
+      body = {:error, "Pokemon not found!"}
+
+      mock(fn %{method: :get, url: @base_url <> "banana"} ->
+        %Tesla.Env{status: 404, body: body}
+      end)
+
+      # ----------------------------------------------------------------
+
+      response =
+        conn
+        |> get(Routes.pokemons_path(conn, :show, "banana"))
+        |> json_response(404)
+
+      assert response == %{"message" => "Pokemon not found!"}
     end
   end
 end
