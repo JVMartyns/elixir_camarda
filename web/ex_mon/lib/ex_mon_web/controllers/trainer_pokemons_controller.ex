@@ -3,10 +3,16 @@ defmodule ExMonWeb.TrainerPokemonsController do
 
   action_fallback ExMonWeb.FallbackController
 
-  def create(conn, params) do
-    params
-    |> ExMon.create_trainer_pokemons()
-    |> handle_response(conn, "create.json", :created)
+  def create(conn, %{"trainer_id" => trainer_id} = params) do
+    case ExMon.fetch_trainer(trainer_id) do
+      {:ok, _trainer} ->
+        params
+        |> ExMon.create_trainer_pokemons()
+        |> handle_response(conn, "create.json", :created)
+
+      {:error, reason} ->
+        {:error, reason}
+    end
   end
 
   def delete(conn, %{"id" => id}) do
