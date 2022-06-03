@@ -15,6 +15,13 @@ defmodule ExMonWeb.FallbackController do
     |> render("404.json", message: message)
   end
 
+  def call(conn, {:error, "Pokemon not found!" = message}) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(ExMonWeb.ErrorView)
+    |> render("404.json", message: message)
+  end
+
   def call(conn, {:error, :unauthorized}) do
     conn
     |> put_status(:unauthorized)
