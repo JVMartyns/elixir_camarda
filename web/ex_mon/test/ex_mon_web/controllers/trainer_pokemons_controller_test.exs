@@ -87,36 +87,36 @@ defmodule ExMonWeb.TrainerPokemonsControllerTest do
       assert response == %{"message" => "Pokemon not found!"}
     end
 
-    # test "when trainer doesn't exist", %{conn: conn} do
-    #   # ---------------------------Mock---------------------------------
-    #   body = %{
-    #     "id" => 25,
-    #     "name" => "pikachu",
-    #     "weight" => 60,
-    #     "types" => [
-    #       %{
-    #         "type" => %{"name" => "eletric"}
-    #       }
-    #     ]
-    #   }
+    test "when trainer doesn't exist", %{conn: conn} do
+      # ---------------------------Mock---------------------------------
+      body = %{
+        "id" => 25,
+        "name" => "pikachu",
+        "weight" => 60,
+        "types" => [
+          %{
+            "type" => %{"name" => "eletric"}
+          }
+        ]
+      }
 
-    #   mock(fn %{method: :get, url: @base_url <> "pikachu"} ->
-    #     %Tesla.Env{status: 200, body: body}
-    #   end)
+      mock(fn %{method: :get, url: @base_url <> "pikachu"} ->
+        %Tesla.Env{status: 200, body: body}
+      end)
 
-    #   # ----------------------------------------------------------------
-    #   params = %{
-    #     "name" => "pikachu",
-    #     "nickname" => "foguinho",
-    #     "trainer_id" => Ecto.UUID.generate()
-    #   }
+      # ----------------------------------------------------------------
+      params = %{
+        "name" => "pikachu",
+        "nickname" => "foguinho",
+        "trainer_id" => Ecto.UUID.generate()
+      }
 
-    #   response =
-    #     conn
-    #     |> post(Routes.trainer_pokemons_path(conn, :create, params))
-    #     |> json_response(404)
+      response =
+        conn
+        |> post(Routes.trainer_pokemons_path(conn, :create, params))
+        |> json_response(404)
 
-    #   assert response == %{"message" => "Trainer not found"}
-    # end
+      assert response == %{"message" => "Trainer not found"}
+    end
   end
 end
